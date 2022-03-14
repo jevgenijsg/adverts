@@ -19,7 +19,7 @@ public class AdController {
     @Autowired
     private AdService adService;
 
-    @RequestMapping(value = "/create/", method = RequestMethod.POST)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<Ad> createAd(@RequestBody AdDto adDto) {
         Ad ad = adService.createAd(adDto.getText(), adDto.getPrice(), adDto.getExpiryDate(),
                 adDto.getCategory());
@@ -43,7 +43,7 @@ public class AdController {
         adService.deleteAdById(id);
     }
 
-    @RequestMapping(value = "/get-all")
+    @RequestMapping(value = "/get-all", method = RequestMethod.GET)
     public ResponseEntity<List<Ad>> getAllAds() {
         List<Ad> ads = adService.getAllAdds();
         return ResponseEntity.ok(ads);
