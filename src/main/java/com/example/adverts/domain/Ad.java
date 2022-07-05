@@ -1,32 +1,30 @@
 package com.example.adverts.domain;
 
-//import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.sql.Date;
 
 
-//@JsonIgnoreProperties({"hibernateLazyInitializer"}) - if use getById() cannot get error No serializer found for class
-// org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor and no properties discovered to create BeanSerializer
-// (to avoid exception, disable SerializationFeature.FAIL_ON_EMPTY_BEANS). This error can be solved using this annotation
 @Entity
-public class Ad implements Serializable {
+@Table(name = "ad")
+public class Ad {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private java.lang.String text;
+    private String text;
     private boolean isActive;
     private BigDecimal price;
-
-
     @Enumerated(value = EnumType.STRING)
     private Category category;
-
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date expiryDate;
 
@@ -49,11 +47,11 @@ public class Ad implements Serializable {
         this.id = id;
     }
 
-    public java.lang.String getText() {
+    public String getText() {
         return text;
     }
 
-    public void setText(java.lang.String text) {
+    public void setText(String text) {
         this.text = text;
     }
 

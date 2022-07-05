@@ -1,20 +1,29 @@
 package com.example.adverts.dto;
 
 import com.example.adverts.domain.Category;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.math.BigDecimal;
 import java.sql.Date;
 
 public class AdDto {
 
+    private Long id;
     private String text;
     private BigDecimal price;
+    private boolean isActive;
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date expiryDate;
+    @Enumerated(value = EnumType.STRING)
     private Category category;
 
-    public AdDto(String text, BigDecimal price, Date expiryDate, Category category) {
+    public AdDto(Long id, String text, BigDecimal price, Date expiryDate, Category category) {
+        this.id = id;
         this.text = text;
         this.price = price;
+        this.isActive = true;
         this.expiryDate = expiryDate;
         this.category = category;
     }
@@ -22,7 +31,7 @@ public class AdDto {
     public AdDto() {
     }
 
-    public java.lang.String getText() {
+    public String getText() {
         return text;
     }
 
@@ -53,4 +62,21 @@ public class AdDto {
     public void setCategory(Category category) {
         this.category = category;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
 }

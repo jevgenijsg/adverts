@@ -1,22 +1,22 @@
 package com.example.adverts.service;
 
-import com.example.adverts.domain.Ad;
-import com.example.adverts.domain.Category;
 
-import java.math.BigDecimal;
-import java.sql.Date;
+import com.example.adverts.domain.Ad;
+import com.example.adverts.dto.AdDto;
+
 import java.util.List;
+import java.util.Optional;
 
 public interface AdService {
-    Ad createAd(String text, BigDecimal price, Date expiryDate, Category category);
+    AdDto createAd(AdDto adDto);
 
-    Ad getAdById(Long id);
+    Optional<AdDto> findAdById(Long id);
 
-    Ad updateAd(Long id, String text, BigDecimal price, Category category, Date expiryDate);
+    AdDto updateAd(AdDto adDto);
 
     void deleteAdById(Long id);
 
-    List<Ad> getAllAdds();
+    List<AdDto> getAllAdds();
 
-    List<Ad> filterAdsByCategory(Category category);
+//    List<Ad> filterAdsByCategory(Category category);
 }
