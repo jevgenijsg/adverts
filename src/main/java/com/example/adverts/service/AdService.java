@@ -1,7 +1,6 @@
 package com.example.adverts.service;
 
-
-import com.example.adverts.domain.Ad;
+import com.example.adverts.domain.Category;
 import com.example.adverts.dto.AdDto;
 
 import java.util.List;
@@ -18,5 +17,5 @@ public interface AdService {
 
     List<AdDto> getAllAdds();
 
-//    List<Ad> filterAdsByCategory(Category category);
+    List<AdDto> filterAdsByCategory(Category category);
 }

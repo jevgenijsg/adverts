@@ -1,7 +1,7 @@
 package com.example.adverts.controller;
+import com.example.adverts.domain.Category;
 import com.example.adverts.dto.AdDto;
 import com.example.adverts.service.AdService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,6 @@ public class AdController {
 
     @PostMapping("/")
     public ResponseEntity<AdDto> createAd(@RequestBody AdDto adDto, BindingResult bindingResult) {
-
         if(bindingResult.hasErrors()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -31,11 +30,11 @@ public class AdController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AdDto> updateAd(@PathVariable("id") Long id, @RequestBody AdDto adDto, BindingResult bindingResult ) {
-        if(bindingResult.hasErrors()){
+    public ResponseEntity<AdDto> updateAd(@PathVariable("id") Long id, @RequestBody AdDto adDto, BindingResult bindingResult) {
+        if(bindingResult.hasErrors() || !(adDto.getId().equals(id))){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        else if (!adService.findAdById(id).isPresent()) {
+        else if (adService.findAdById(id).isEmpty()) {
           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         AdDto updatedAd = adService.updateAd(adDto);
@@ -44,13 +43,9 @@ public class AdController {
 
     @GetMapping("/{id}")
     public ResponseEntity<AdDto> getAdById(@PathVariable("id") Long id) {
-            if(id == null){
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            if(adService.findAdById(id).isEmpty()){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        return new ResponseEntity<>(adService.findAdById(id).get(), HttpStatus.OK);
+        return adService.findAdById(id)
+                .map( user -> new ResponseEntity<>(user, HttpStatus.OK) )
+                .orElseGet( () -> new ResponseEntity<>(HttpStatus.NOT_FOUND) );
     }
 
     @DeleteMapping("/{id}")
@@ -68,10 +63,10 @@ public class AdController {
         return new ResponseEntity<>(ads, HttpStatus.OK);
     }
 
-/*    @GetMapping("/filter/{category}")
+    @GetMapping("/filter/{category}")
     public ResponseEntity<List<AdDto>> filterAdsByCategory(@PathVariable String category) {
-        List<Ad> filteredAds = adService.filterAdsByCategory(Category.valueOf(category.toUpperCase()));
+        List<AdDto> filteredAds = adService.filterAdsByCategory(Category.valueOf(category.toUpperCase()));
         return ResponseEntity.ok(filteredAds);
-    }*/
+    }
 
 }

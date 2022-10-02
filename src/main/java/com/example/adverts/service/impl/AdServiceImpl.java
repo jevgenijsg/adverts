@@ -1,6 +1,7 @@
 package com.example.adverts.service.impl;
 
 import com.example.adverts.domain.Ad;
+import com.example.adverts.domain.Category;
 import com.example.adverts.dto.AdDto;
 import com.example.adverts.mapper.AdMapper;
 import com.example.adverts.repository.AdRepository;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +40,14 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public AdDto updateAd(AdDto adDto) {
-        return mapper.adToAdDto(adRepository.findById(adDto.getId()).orElse(null));
+        Ad adToUpdate = adRepository.getById(adDto.getId());
+        adToUpdate.setActive(adDto.isActive());
+        adToUpdate.setCategory(adDto.getCategory());
+        adToUpdate.setText(adDto.getText());
+        adToUpdate.setPrice(adDto.getPrice());
+        adToUpdate.setExpiryDate(adDto.getExpiryDate());
+        adRepository.save(adToUpdate);
+        return mapper.adToAdDto(adToUpdate);
     }
 
     @Override
@@ -51,14 +60,15 @@ public class AdServiceImpl implements AdService {
         return mapper.adListToAdDtoList(adRepository.findAll());
     }
 
-/*    @Override
-    public List<Ad> filterAdsByCategory(Category category) {
-        List<Ad> ads = new ArrayList<>();
-        for(Ad ad : adRepository.findAll()){
+    @Override
+    public List<AdDto> filterAdsByCategory(Category category) {
+        List<AdDto> ads = new ArrayList<>();
+        List<Ad> adsInDb = adRepository.findAll();
+        for(Ad ad : adsInDb){
             if(ad.getCategory().equals(category)){
-                ads.add(ad);
+                ads.add(mapper.adToAdDto(ad));
             }
         }
         return ads;
-    }*/
+    }
 }
