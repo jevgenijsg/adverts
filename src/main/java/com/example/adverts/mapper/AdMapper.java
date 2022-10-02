@@ -11,7 +11,8 @@ public interface AdMapper{
 
     Ad adDtoToAd(AdDto adDto);
     AdDto adToAdDto(Ad ad);
-
     List<AdDto> adListToAdDtoList(List<Ad> ad);
+
+    List<Ad> adDtoListToAdList(List<AdDto> ad);
 
 }

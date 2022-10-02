@@ -12,33 +12,31 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Example;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-@SpringBootTest()
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class AdServiceImplTest {
 
     @Mock
     private AdRepository adRepository;
-
     @Mock
     private AdMapper adMapper;
 
@@ -60,8 +58,6 @@ class AdServiceImplTest {
         secondAd.setId(2L);
 
         firstAdDto = new AdDto(1L, "test", BigDecimal.valueOf(10.00), Date.valueOf("2022-10-10"), Category.CARS);
-        firstAd.setId(1L);
-
         secondAdDto = new AdDto(2L, "test", BigDecimal.valueOf(22.20), Date.valueOf("2022-08-18"), Category.TOYS);
 
     }
@@ -108,17 +104,20 @@ class AdServiceImplTest {
         verify(adRepository, times(1)).deleteById(anyLong());
     }
 
-/*    @Test
+    @Test
     void getAllAdds() {
-
         List<Ad> ads = new ArrayList<>();
         ads.add(firstAd);
         ads.add(secondAd);
+        List<AdDto> adsDto = new ArrayList<>();
+        adsDto.add(firstAdDto);
+        adsDto.add(secondAdDto);
 
         when(adRepository.findAll()).thenReturn(ads);
-        assertThat(adService.getAllAdds()).isNotNull();
-        assertThat(adService.getAllAdds().size()).isEqualTo(2);
-    }*/
+        when(adMapper.adListToAdDtoList(ads)).thenReturn(adsDto);
+        assertThat(adService.getAllAdds(), hasSize(2));
+        verify(adRepository,times(1)).findAll();
+    }
 
 /*    @Test
     void filterAdsByCategory() {
