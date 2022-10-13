@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -18,7 +20,7 @@ public class AdController {
     private AdService adService;
 
     @PostMapping("/")
-    public ResponseEntity<AdDto> createAd(@RequestBody AdDto adDto, BindingResult bindingResult) {
+    public ResponseEntity<AdDto> createAd(@Valid @RequestBody AdDto adDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -30,7 +32,7 @@ public class AdController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AdDto> updateAd(@PathVariable("id") Long id, @RequestBody AdDto adDto, BindingResult bindingResult) {
+    public ResponseEntity<AdDto> updateAd(@PathVariable("id") @NotNull Long id, @Valid @RequestBody AdDto adDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors() || !(adDto.getId().equals(id))){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -42,14 +44,14 @@ public class AdController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AdDto> getAdById(@PathVariable("id") Long id) {
+    public ResponseEntity<AdDto> getAdById(@PathVariable("id") @NotNull Long id) {
         return adService.findAdById(id)
                 .map( user -> new ResponseEntity<>(user, HttpStatus.OK) )
                 .orElseGet( () -> new ResponseEntity<>(HttpStatus.NOT_FOUND) );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAdById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAdById(@PathVariable("id") @NotNull Long id) {
         if(adService.findAdById(id).isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -64,7 +66,7 @@ public class AdController {
     }
 
     @GetMapping("/filter/{category}")
-    public ResponseEntity<List<AdDto>> filterAdsByCategory(@PathVariable String category) {
+    public ResponseEntity<List<AdDto>> filterAdsByCategory(@PathVariable("category") @NotNull String category) {
         List<AdDto> filteredAds = adService.filterAdsByCategory(Category.valueOf(category.toUpperCase()));
         return ResponseEntity.ok(filteredAds);
     }

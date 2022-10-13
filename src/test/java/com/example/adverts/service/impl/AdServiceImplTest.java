@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Example;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
@@ -33,7 +34,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class)
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class AdServiceImplTest {
@@ -81,6 +82,14 @@ class AdServiceImplTest {
     }
 
     @Test
+    void createAd_AdExists() {
+        when(adRepository.exists(Example.of(firstAd))).thenReturn(true);
+        when(adMapper.adDtoToAd(firstAdDto)).thenReturn(firstAd);
+        Ad savedAd = adMapper.adDtoToAd(adService.createAd(firstAdDto));
+        verify(adRepository, times(1)).exists(Example.of(firstAd));
+    }
+
+    @Test
     void findAdById() {
         when(adRepository.findById(anyLong())).thenReturn(Optional.of(firstAd));
         when(adMapper.adToAdDto(firstAd)).thenReturn(firstAdDto);
@@ -96,10 +105,9 @@ class AdServiceImplTest {
 
     @Test
     void updateAd() {
-
         when(adRepository.save(firstAd)).thenReturn(firstAd);
-        when(adRepository.getById(anyLong())).thenReturn(firstAd);
         when(adMapper.adToAdDto(firstAd)).thenReturn(firstAdDto);
+        when(adMapper.adDtoToAd(firstAdDto)).thenReturn(firstAd);
         AdDto updatedAd = adService.updateAd(firstAdDto);
 
         assertEquals(firstAd.getId(), updatedAd.getId());

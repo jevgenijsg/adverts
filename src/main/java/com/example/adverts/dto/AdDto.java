@@ -5,11 +5,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.sql.Date;
 
 public class AdDto {
 
+    @NotNull
     private Long id;
     private String text;
     private BigDecimal price;
