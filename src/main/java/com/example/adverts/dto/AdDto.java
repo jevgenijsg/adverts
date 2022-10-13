@@ -5,17 +5,31 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.sql.Date;
 
 public class AdDto {
 
+    @Min(value = 1)
     private Long id;
+
+    @NotNull
+    @NotBlank
     private String text;
+
+    @NotNull
+    @Min(value = 0)
     private BigDecimal price;
+
     private boolean isActive;
+
     @JsonFormat(pattern="dd-MM-yyyy")
     private Date expiryDate;
+
+    @NotNull
     @Enumerated(value = EnumType.STRING)
     private Category category;
 

@@ -29,7 +29,8 @@ public class AdServiceImpl implements AdService {
         Ad ad = mapper.adDtoToAd(adDto);
         if(adRepository.exists(Example.of(ad))){
             return null;
-        } else
+        }
+            ad.setActive(true);
             return mapper.adToAdDto(adRepository.save(ad));
     }
 
@@ -40,14 +41,8 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public AdDto updateAd(AdDto adDto) {
-        Ad adToUpdate = adRepository.getById(adDto.getId());
-        adToUpdate.setActive(adDto.isActive());
-        adToUpdate.setCategory(adDto.getCategory());
-        adToUpdate.setText(adDto.getText());
-        adToUpdate.setPrice(adDto.getPrice());
-        adToUpdate.setExpiryDate(adDto.getExpiryDate());
-        adRepository.save(adToUpdate);
-        return mapper.adToAdDto(adToUpdate);
+        Ad updatedAd = adRepository.save(mapper.adDtoToAd(adDto));
+        return mapper.adToAdDto(updatedAd);
     }
 
     @Override
