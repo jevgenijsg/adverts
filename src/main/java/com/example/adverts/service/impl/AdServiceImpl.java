@@ -2,43 +2,46 @@ package com.example.adverts.service.impl;
 
 import com.example.adverts.domain.Ad;
 import com.example.adverts.domain.Category;
+import com.example.adverts.dto.AdDto;
+import com.example.adverts.mapper.AdMapper;
 import com.example.adverts.repository.AdRepository;
 import com.example.adverts.service.AdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.sql.Date;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AdServiceImpl implements AdService {
 
     @Autowired
-    AdRepository adRepository;
+    private AdRepository adRepository;
+
+    @Autowired
+    private AdMapper mapper;
 
     @Override
-    public Ad createAd(String text, BigDecimal price, Date expiryDate, Category category) {
-
-        Ad ad = setupAd(text, price, expiryDate, category);
+    public AdDto createAd(AdDto adDto) {
+        Ad ad = mapper.adDtoToAd(adDto);
         if(adRepository.exists(Example.of(ad))){
             return null;
         } else
-            return adRepository.save(ad);
+            return mapper.adToAdDto(adRepository.save(ad));
     }
 
     @Override
-    public Ad getAdById(Long id) {
-        return adRepository.findById(id).get();
+    public Optional<AdDto> findAdById(Long id) {
+        return Optional.ofNullable(mapper.adToAdDto(adRepository.findById(id).orElse(null)));
     }
 
     @Override
-    public Ad updateAd(Long id, String text, BigDecimal price, Category category, Date expiryDate) {
-        Ad ad = setupAd(text, price, expiryDate, category);
-        ad.setId(id);
-        return adRepository.save(ad);
+    public AdDto updateAd(AdDto adDto) {
+        Ad updatedAd = adRepository.save(mapper.adDtoToAd(adDto));
+        return mapper.adToAdDto(updatedAd);
     }
 
     @Override
@@ -47,28 +50,19 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public List<Ad> getAllAdds() {
-        return adRepository.findAll();
+    public List<AdDto> getAllAdds() {
+        return mapper.adListToAdDtoList(adRepository.findAll());
     }
 
     @Override
-    public List<Ad> filterAdsByCategory(Category category) {
-        List<Ad> ads = new ArrayList<>();
-        for(Ad ad : adRepository.findAll()){
+    public List<AdDto> filterAdsByCategory(Category category) {
+        List<AdDto> ads = new ArrayList<>();
+        List<Ad> adsInDb = adRepository.findAll();
+        for(Ad ad : adsInDb){
             if(ad.getCategory().equals(category)){
-                ads.add(ad);
+                ads.add(mapper.adToAdDto(ad));
             }
         }
         return ads;
-    }
-
-    private Ad setupAd(String text, BigDecimal price, Date expiryDate, Category category){
-        Ad ad = new Ad();
-        ad.setText(text);
-        ad.setCategory(category);
-        ad.setExpiryDate(expiryDate);
-        ad.setPrice(price);
-        ad.setActive(true);
-        return ad;
     }
 }
