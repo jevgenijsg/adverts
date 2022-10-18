@@ -13,6 +13,7 @@ import java.sql.Date;
 
 public class AdDto {
 
+
     @Min(value = 1)
     private Long id;
 
