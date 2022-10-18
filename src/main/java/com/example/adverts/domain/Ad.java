@@ -1,6 +1,8 @@
 package com.example.adverts.domain;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,21 +13,28 @@ import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.sql.Date;
 
-
 @Entity
 @Table(name = "ad")
 public class Ad {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "text")
     private String text;
+
+    @Column(name = "is_active")
     private boolean isActive;
+
+    @Column(name = "price")
     private BigDecimal price;
+
+    @Column(name = "category")
     @Enumerated(value = EnumType.STRING)
     private Category category;
+
     @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @Column(name = "expiry_date")
     private Date expiryDate;
 
     public Ad(String text, BigDecimal price, Category category, Date expiryDate) {

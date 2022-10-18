@@ -29,7 +29,8 @@ public class AdServiceImpl implements AdService {
         Ad ad = mapper.adDtoToAd(adDto);
         if(adRepository.exists(Example.of(ad))){
             return null;
-        } else
+        }
+            ad.setActive(true);
             return mapper.adToAdDto(adRepository.save(ad));
     }
 
