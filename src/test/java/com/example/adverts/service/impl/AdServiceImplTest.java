@@ -8,13 +8,11 @@ import com.example.adverts.repository.AdRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Example;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -85,7 +83,7 @@ class AdServiceImplTest {
     void createAd_AdExists() {
         when(adRepository.exists(Example.of(firstAd))).thenReturn(true);
         when(adMapper.adDtoToAd(firstAdDto)).thenReturn(firstAd);
-        Ad savedAd = adMapper.adDtoToAd(adService.createAd(firstAdDto));
+        adMapper.adDtoToAd(adService.createAd(firstAdDto));
         verify(adRepository, times(1)).exists(Example.of(firstAd));
     }
 
