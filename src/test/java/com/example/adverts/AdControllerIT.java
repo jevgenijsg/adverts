@@ -1,4 +1,4 @@
-package com.example.adverts.controller;
+package com.example.adverts;
 
 import com.example.adverts.domain.Ad;
 import com.example.adverts.domain.Category;
@@ -8,13 +8,11 @@ import com.example.adverts.repository.AdRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -40,7 +38,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class AdControllerIT {
@@ -64,7 +61,7 @@ class AdControllerIT {
     }
 
     @Test
-    void findadById_OK() throws Exception {
+    void findaDById_OK() throws Exception {
         when(mockRepository.findById(1L)).thenReturn(Optional.ofNullable(ad));
 
         mockMvc.perform(get("/ads/1"))
