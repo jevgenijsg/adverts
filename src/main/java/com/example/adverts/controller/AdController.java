@@ -67,8 +67,7 @@ public class AdController {
 
     @GetMapping("/filter/{category}")
     public ResponseEntity<List<AdDto>> filterAdsByCategory(@PathVariable("category") @NotNull String category) {
-        List<AdDto> filteredAds = adService.filterAdsByCategory(Category.valueOf(category.toUpperCase()));
-        return ResponseEntity.ok(filteredAds);
+            List<AdDto> filteredAds = adService.filterAdsByCategory(Category.valueOf(category.toUpperCase()));
+            return new ResponseEntity<>(filteredAds, HttpStatus.OK);
     }
-
 }
