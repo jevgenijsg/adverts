@@ -9,17 +9,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.awt.print.Book;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -82,12 +79,12 @@ class AdControllerIT {
     }
 
     @Test
-    void findAdById_NotFound_404() throws Exception {
+    void findAdById_NotFound404() throws Exception {
         mockMvc.perform(get("/ads/12")).andExpect(status().isNotFound());
     }
 
     @Test
-    void delete_book_OK() throws Exception {
+    void deleteAd_OK() throws Exception {
         when(mockRepository.findById(anyLong())).thenReturn(Optional.ofNullable(ad));
         doNothing().when(mockRepository).deleteById(1L);
         mockMvc.perform(delete("/ads/1"))
@@ -97,7 +94,7 @@ class AdControllerIT {
     }
 
     @Test
-    void deleteAdById_NotFound_404() throws Exception {
+    void deleteAdById_NotFound404() throws Exception {
         when(mockRepository.findById(anyLong())).thenReturn(Optional.empty());
         doNothing().when(mockRepository).deleteById(anyLong());
         mockMvc.perform(delete("/ads/12"))
@@ -180,7 +177,7 @@ class AdControllerIT {
     }
 
     @Test
-    void updateAdOK() throws Exception {
+    void updateAd_OK() throws Exception {
 
         AdDto updatedAdDto = new AdDto(1L,"updatedTest", BigDecimal.valueOf(14.00), Date.valueOf("2022-10-10"), Category.CARS);
         Ad updatedAd = mockMapper.adDtoToAd(updatedAdDto);
